@@ -1,4 +1,4 @@
-module ActiveUtils #:nodoc:
+module ActiveMerchant #:nodoc:
   module RequiresParameters #:nodoc:
     def requires!(hash, *params)
       params.each do |param|

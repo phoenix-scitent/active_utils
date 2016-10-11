@@ -1,7 +1,7 @@
 #!ruby19
 # encoding: utf-8
 
-module ActiveUtils #:nodoc:
+module ActiveMerchant #:nodoc:
   class InvalidCountryCodeError < StandardError
   end
 
@@ -117,7 +117,6 @@ module ActiveUtils #:nodoc:
       { :alpha2 => 'CI', :name => 'Cote D\'Ivoire', :alpha3 => 'CIV', :numeric => '384' },
       { :alpha2 => 'HR', :name => 'Croatia', :alpha3 => 'HRV', :numeric => '191' },
       { :alpha2 => 'CU', :name => 'Cuba', :alpha3 => 'CUB', :numeric => '192' },
-      { :alpha2 => 'CW', :name => 'Curaçao', :alpha3 => 'CUW', :numeric => '531' },
       { :alpha2 => 'CY', :name => 'Cyprus', :alpha3 => 'CYP', :numeric => '196' },
       { :alpha2 => 'CZ', :name => 'Czech Republic', :alpha3 => 'CZE', :numeric => '203' },
       { :alpha2 => 'DK', :name => 'Denmark', :alpha3 => 'DNK', :numeric => '208' },
@@ -179,7 +178,6 @@ module ActiveUtils #:nodoc:
       { :alpha2 => 'KI', :name => 'Kiribati', :alpha3 => 'KIR', :numeric => '296' },
       { :alpha2 => 'KP', :name => 'Korea, Democratic People\'s Republic of', :alpha3 => 'PRK', :numeric => '408' },
       { :alpha2 => 'KR', :name => 'Korea, Republic of', :alpha3 => 'KOR', :numeric => '410' },
-      { :alpha2 => 'KV', :name => 'Kosovo', :alpha3 => 'KSV', :numeric => '377' },
       { :alpha2 => 'KW', :name => 'Kuwait', :alpha3 => 'KWT', :numeric => '414' },
       { :alpha2 => 'KG', :name => 'Kyrgyzstan', :alpha3 => 'KGZ', :numeric => '417' },
       { :alpha2 => 'LA', :name => 'Lao People\'s Democratic Republic', :alpha3 => 'LAO', :numeric => '418' },
@@ -262,7 +260,6 @@ module ActiveUtils #:nodoc:
       { :alpha2 => 'SC', :name => 'Seychelles', :alpha3 => 'SYC', :numeric => '690' },
       { :alpha2 => 'SL', :name => 'Sierra Leone', :alpha3 => 'SLE', :numeric => '694' },
       { :alpha2 => 'SG', :name => 'Singapore', :alpha3 => 'SGP', :numeric => '702' },
-      { :alpha2 => 'SX', :name => 'Sint Maarten (Netherlands Part)', :alpha3 => 'SXM', :numeric => '534' },
       { :alpha2 => 'SK', :name => 'Slovakia', :alpha3 => 'SVK', :numeric => '703' },
       { :alpha2 => 'SI', :name => 'Slovenia', :alpha3 => 'SVN', :numeric => '705' },
       { :alpha2 => 'SB', :name => 'Solomon Islands', :alpha3 => 'SLB', :numeric => '090' },
@@ -312,16 +309,6 @@ module ActiveUtils #:nodoc:
       { :alpha2 => 'ZW', :name => 'Zimbabwe', :alpha3 => 'ZWE', :numeric => '716' },
       { :alpha2 => 'AX', :name => 'Åland Islands', :alpha3 => 'ALA', :numeric => '248' }
     ]
-
-    COUNTRIES_THAT_DO_NOT_USE_POSTALCODES = %w(
-      QA BZ BS BF BJ AG AE AI AO AW HK
-      FJ ML JM ZW YE UG TV TT TG TD PA
-      CW
-    )
-
-    def uses_postal_codes?
-      !COUNTRIES_THAT_DO_NOT_USE_POSTALCODES.include?(code(:alpha2).value)
-    end
 
     def self.find(name)
       raise InvalidCountryCodeError, "Cannot lookup country for an empty name" if name.blank?

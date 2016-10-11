@@ -1,4 +1,4 @@
-module ActiveUtils #:nodoc:
+module ActiveMerchant #:nodoc:
   module Validateable #:nodoc:
     def valid?
       errors.clear

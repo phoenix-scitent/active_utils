@@ -10,15 +10,13 @@ Gem::Specification.new do |s|
   s.email       = ["developers@jadedpixel.com"]
   s.homepage    = "http://github.com/shopify/active_utils"
   s.summary     = %q{Common utils used by active_merchant, active_fulfillment, and active_shipping}
-  s.license     = 'MIT'
 
   s.rubyforge_project = "active_utils"
 
-  s.add_dependency('activesupport', '= 2.3.11')
+  s.add_dependency('activesupport', '>= 2.3.11')
   s.add_dependency('i18n')
 
   s.add_development_dependency('rake')
-  s.add_development_dependency('minitest')
   s.add_development_dependency('mocha')
 
   s.files         = `git ls-files`.split("\n")

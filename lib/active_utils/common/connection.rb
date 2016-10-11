@@ -3,7 +3,7 @@ require 'net/http'
 require 'net/https'
 require 'benchmark'
 
-module ActiveUtils
+module ActiveMerchant
   class Connection
     include NetworkConnectionRetries
 
@@ -11,8 +11,6 @@ module ActiveUtils
     OPEN_TIMEOUT = 60
     READ_TIMEOUT = 60
     VERIFY_PEER = true
-    CA_FILE = (File.dirname(__FILE__) + '/../certs/cacert.pem')
-    CA_PATH = nil
     RETRY_SAFE = false
     RUBY_184_POST_HEADERS = { "Content-Type" => "application/x-www-form-urlencoded" }
 
@@ -20,19 +18,12 @@ module ActiveUtils
     attr_accessor :open_timeout
     attr_accessor :read_timeout
     attr_accessor :verify_peer
-    attr_accessor :ssl_version
-    attr_accessor :ca_file
-    attr_accessor :ca_path
-    attr_accessor :retry_safe
     attr_accessor :pem
     attr_accessor :pem_password
     attr_accessor :wiredump_device
     attr_accessor :logger
     attr_accessor :tag
     attr_accessor :ignore_http_status
-    attr_accessor :max_retries
-    attr_accessor :proxy_address
-    attr_accessor :proxy_port
 
     def initialize(endpoint)
       @endpoint     = endpoint.is_a?(URI) ? endpoint : URI.parse(endpoint)
@@ -40,21 +31,13 @@ module ActiveUtils
       @read_timeout = READ_TIMEOUT
       @retry_safe   = RETRY_SAFE
       @verify_peer  = VERIFY_PEER
-      @ca_file      = CA_FILE
-      @ca_path      = CA_PATH
-      @max_retries  = MAX_RETRIES
       @ignore_http_status = false
-      @ssl_version = nil
-      @proxy_address = nil
-      @proxy_port = nil
     end
 
     def request(method, body, headers = {})
-      request_start = Time.now.to_f
-
-      retry_exceptions(:max_retries => max_retries, :logger => logger, :tag => tag) do
+      retry_exceptions(:max_retries => MAX_RETRIES, :logger => logger, :tag => tag) do
         begin
-          info "connection_http_method=#{method.to_s.upcase} connection_uri=#{endpoint}", tag
+          info "#{method.to_s.upcase} #{endpoint}", tag
 
           result = nil
 
@@ -85,14 +68,11 @@ module ActiveUtils
           result
         end
       end
-
-    ensure
-      info "connection_request_total_time=%.4fs" % [Time.now.to_f - request_start], tag
     end
 
     private
     def http
-      http = Net::HTTP.new(endpoint.host, endpoint.port, proxy_address, proxy_port)
+      http = Net::HTTP.new(endpoint.host, endpoint.port)
       configure_debugging(http)
       configure_timeouts(http)
       configure_ssl(http)
@@ -113,16 +93,13 @@ module ActiveUtils
       return unless endpoint.scheme == "https"
 
       http.use_ssl = true
-      http.ssl_version = ssl_version if ssl_version
 
       if verify_peer
         http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.ca_file     = ca_file
-        http.ca_path     = ca_path
+        http.ca_file     = File.dirname(__FILE__) + '/../../certs/cacert.pem'
       else
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
-
     end
 
     def configure_cert(http)
