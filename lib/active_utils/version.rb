@@ -1,3 +1,3 @@
 module ActiveUtils
-  VERSION = "1.0.5"
+  VERSION = "3.2.2"
 end
